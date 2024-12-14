@@ -4,6 +4,7 @@ const env = require("./configs/env");
 const transactionModel = require("./model/transaction.model");
 const getNewTransaction = require("./utils/getNewTransaction");
 const getLastTransaction = require("./utils/getLastTransaction");
+const callVoice = require("./utils/callVoice");
 
 // connect mongo
 mongoose
@@ -32,6 +33,9 @@ async function main() {
       } else {
         console.log(nextTransaction.message);
       }
+
+      const voiceResponse = await callVoice({ text: "chào bạn" });
+      // console.log("-- voiceResponse", voiceResponse.data);
     }, 5500);
   } catch (error) {
     console.error(error);
