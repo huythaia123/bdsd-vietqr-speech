@@ -7,7 +7,7 @@ const getLastTransaction = require("./utils/getLastTransaction");
 
 // connect mongo
 mongoose
-  .connect(env.MONGO_URI)
+  .connect(env.MONGO_URI, { dbName: env.MONGO_DB_NAME })
   .then(() => console.log("connect mongo successed"))
   .catch((error) => console.error(error));
 
@@ -32,7 +32,7 @@ async function main() {
       } else {
         console.log(nextTransaction.message);
       }
-    }, 5000);
+    }, 5500);
   } catch (error) {
     console.error(error);
   }
