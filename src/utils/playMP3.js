@@ -6,6 +6,8 @@ const playerLib = require("play-sound");
 // Tạo đối tượng player với trình phát mặc định
 let player;
 
+console.log(os.arch(), "---", os.platform());
+
 if (os.arch() === "arm" && os.platform() === "linux") {
   // Nếu là Raspberry Pi (kiến trúc ARM và Linux), chọn mpg123
   player = playerLib({ players: ["mpg123"] });
@@ -15,7 +17,6 @@ if (os.arch() === "arm" && os.platform() === "linux") {
   player = playerLib();
   console.log("Non-Raspberry Pi system, using default audio player.");
 }
-
 
 function playMP3(path) {
   player.play(path, function (err) {
