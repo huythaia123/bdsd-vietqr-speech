@@ -1,26 +1,56 @@
-const fs = require("node:fs");
-const { default: axios } = require("axios");
+const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
 
-async function downloadMP3(url, fileNameOutput) {
-  const outputPath = process.cwd() + `/src/static/voice/${fileNameOutput}`;
+async function downloadMP3(
+  url,
+  fileNameOutput,
+  maxRetries = 5,
+  retryDelay = 2000
+) {
+  const outputPath = path.join(
+    process.cwd(),
+    `/src/static/voice/${fileNameOutput}`
+  );
 
+  // Kiểm tra file đã tồn tại
   if (fs.existsSync(outputPath)) {
     console.log("The file already exists, no need to download:", outputPath);
-    return;
+    return outputPath; // Trả về đường dẫn file nếu file đã tồn tại
   }
 
-  const response = await axios.get(url, { responseType: "stream" });
+  let attempt = 0;
 
-  const writer = fs.createWriteStream(outputPath);
-  response.data.pipe(writer);
+  while (attempt < maxRetries) {
+    try {
+      console.log(`Attempt ${attempt + 1}/${maxRetries} to download: ${url}`);
 
-  return new Promise((resolve, reject) => {
-    writer.on("finish", () => {
-      console.log("Download mp3 successed:", outputPath);
-      resolve();
-    });
-    writer.on("error", reject);
-  });
+      // Gửi request tải file
+      const response = await axios.get(url, { responseType: "stream" });
+
+      const writer = fs.createWriteStream(outputPath);
+      response.data.pipe(writer);
+
+      // Đợi quá trình ghi file hoàn tất
+      await new Promise((resolve, reject) => {
+        writer.on("finish", resolve);
+        writer.on("error", reject);
+      });
+
+      console.log("Download MP3 succeeded:", outputPath);
+      return outputPath; // Trả về đường dẫn file khi tải thành công
+    } catch (error) {
+      console.error(`Error on attempt ${attempt + 1}:`, error.message);
+      attempt++;
+
+      if (attempt < maxRetries) {
+        console.log(`Retrying in ${retryDelay}ms...`);
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+      } else {
+        console.error("Max retries reached. Failed to download the file.");
+        throw error; // Ném lỗi nếu quá số lần retry
+      }
+    }
+  }
 }
-
 module.exports = downloadMP3;

@@ -1,6 +1,4 @@
 require("dotenv").config();
-const path = require("path");
-const player = require("play-sound")();
 const { default: mongoose } = require("mongoose");
 const env = require("./configs/env");
 const transactionModel = require("./model/transaction.model");
@@ -56,13 +54,12 @@ async function main() {
             text: newTransaction.SoTien.toString() + " đồng",
           });
           // download mp3 file
-          setTimeout(async () => {
-            await downloadMP3(
-              voiceResponse.data.async, // link mp3 online
-              newTransaction.SoTien.toString() + ".mp3" //save path
-            );
-            playMP3(voicePath);
-          }, 2000);
+          const downloadPath = await downloadMP3(
+            voiceResponse.data.async, // link mp3 online
+            newTransaction.SoTien.toString() + ".mp3" //save path
+          );
+          // play mp3
+          playMP3(downloadPath);
         }
       } else {
         // console.log(nextTransaction.message);
