@@ -10,7 +10,7 @@ console.log(os.arch(), "---", os.platform());
 
 if (os.arch().includes("arm") && os.platform().includes("linux")) {
   // Nếu là Raspberry Pi (kiến trúc ARM và Linux), chọn mpg123
-  player = playerLib({ players: ["mpg123"] });
+  player = playerLib({ players: ["mplayer"] });
   console.log("Detected Raspberry Pi, using mpg123 for audio playback.");
 } else {
   // Nếu không phải Raspberry Pi, để thư viện tự động chọn trình phát
