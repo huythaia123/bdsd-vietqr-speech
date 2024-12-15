@@ -1,4 +1,4 @@
-const player = require("play-sound")();
+const player = require("play-sound")({ players: ["mplayer"] });
 
 function playMP3(path) {
   player.play(path, function (err) {
