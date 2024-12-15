@@ -29,7 +29,11 @@ async function main() {
         MaGiaoDich: lastTransaction ? lastTransaction.MaGiaoDich : "",
       });
 
-      if (nextTransaction.message !== "There are no new transactions yet") {
+      if (lastTransaction.MaGiaoDich === nextTransaction?.data?.MaGiaoDich) {
+        console.log("?? transaction is pending");
+      } else if (
+        nextTransaction.message !== "There are no new transactions yet"
+      ) {
         // save new transaction
         const newTransaction = await transactionModel.create(
           nextTransaction.data
@@ -44,11 +48,13 @@ async function main() {
         if (fileVoiceExists) {
           // play mp3 file
           playMP3(voicePath);
+          console.log(
+            `++ New transaction ${newTransaction.MaGiaoDich} - ${newTransaction.SoTien} VND`
+          );
         } else {
           const voiceResponse = await callVoice({
             text: newTransaction.SoTien.toString() + " đồng",
           });
-          console.log(voiceResponse.data.async);
           // download mp3 file
           setTimeout(async () => {
             await downloadMP3(
@@ -59,7 +65,7 @@ async function main() {
           }, 2000);
         }
       } else {
-        console.log(nextTransaction.message);
+        // console.log(nextTransaction.message);
       }
     }, 6000);
   } catch (error) {
