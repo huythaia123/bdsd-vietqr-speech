@@ -5,7 +5,13 @@
   "type": "commonjs",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "dev": "node --watch src/index.js",
+    "dev-pm2": "pm2 start src/index.js --watch --name bdsd",
+    "start-pm2": "pm2 start src/index.js --name bdsd",
+    "stop-pm2": "pm2 stop bdsd",
+    "restart-pm2": "pm2 restart bdsd",
+    "delete-pm2": "pm2 delete bdsd",
+    "logs-pm2": "pm2 logs bdsd"
   },
   "keywords": [],
   "author": "",
