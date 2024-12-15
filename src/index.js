@@ -7,36 +7,37 @@ const getLastTransaction = require("./utils/getLastTransaction");
 const callVoice = require("./utils/callVoice");
 
 // connect mongo
-mongoose
-  .connect(env.MONGO_URI, { dbName: env.MONGO_DB_NAME })
-  .then(() => console.log("connect mongo successed"))
-  .catch((error) => console.error(error));
+// mongoose
+//   .connect(env.MONGO_URI, { dbName: env.MONGO_DB_NAME })
+//   .then(() => console.log("connect mongo successed"))
+//   .catch((error) => console.error(error));
 
 // main
 async function main() {
   try {
-    setInterval(async () => {
-      // get last transaction from db
-      const lastTransaction = await getLastTransaction();
+    const voicePath = "chao_cac_ban.mp3";
+    const volume = 1; // max;
 
-      // get next transaction from MaGiaoDich in last transaction
-      const nextTransaction = await getNewTransaction({
-        MaGiaoDich: lastTransaction ? lastTransaction.MaGiaoDich : "",
-      });
+    // const voiceResponse = await callVoice({ text: "chào các bạn" });
+    // console.log("-- voiceResponse", voiceResponse.data);
 
-      if (nextTransaction.message !== "There are no new transactions yet") {
-        // save new transaction
-        const newTransaction = await transactionModel.create(
-          nextTransaction.data
-        );
-        console.log(newTransaction.MaGiaoDich);
-      } else {
-        console.log(nextTransaction.message);
-      }
-
-      const voiceResponse = await callVoice({ text: "chào bạn" });
-      // console.log("-- voiceResponse", voiceResponse.data);
-    }, 5500);
+    // setInterval(async () => {
+    //   // get last transaction from db
+    //   const lastTransaction = await getLastTransaction();
+    //   // get next transaction from MaGiaoDich in last transaction
+    //   const nextTransaction = await getNewTransaction({
+    //     MaGiaoDich: lastTransaction ? lastTransaction.MaGiaoDich : "",
+    //   });
+    //   if (nextTransaction.message !== "There are no new transactions yet") {
+    //     // save new transaction
+    //     const newTransaction = await transactionModel.create(
+    //       nextTransaction.data
+    //     );
+    //     console.log(newTransaction.MaGiaoDich);
+    //   } else {
+    //     console.log(nextTransaction.message);
+    //   }
+    // }, 5500);
   } catch (error) {
     console.error(error);
   }
