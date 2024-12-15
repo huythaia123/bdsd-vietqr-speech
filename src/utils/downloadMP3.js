@@ -5,8 +5,8 @@ const path = require("path");
 async function downloadMP3(
   url,
   fileNameOutput,
-  maxRetries = 10,
-  retryDelay = 3000
+  maxRetries = 100,
+  retryDelay = 5000
 ) {
   const outputPath = path.join(
     process.cwd(),
