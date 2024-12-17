@@ -62,7 +62,7 @@ const downloadAudio = async ({ audioUrl, filename, maxRetries = 50, retryDelay =
             })
 
             console.log(
-                `[SUCCESS] Attempt ${attempt} Download audio file successfully :`,
+                `[SUCCESS] Attempt ${attempt + 1} - Download audio file successfully :`,
                 AUDIO_FILE_PATH
             )
             return AUDIO_FILE_PATH

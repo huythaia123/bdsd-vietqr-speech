@@ -55,15 +55,14 @@ checkConnectDB(sequelize)
                         audioUrl: linkSpeech.async,
                         filename,
                     })
-                    // console.log(`[INFO] audioFilePathAsync`, (await audioFilePathAsync).toString)
                     playAudio(audioFilePathAsync)
                 }
             } else {
-                // khôn có giao dịch mới
+                // không có giao dịch mới
                 console.log("[INFO] newSheetTrans.message :", newSheetTrans.message)
             }
         } catch (error) {
             console.error("[ERROR] :", error.message)
         }
-    }, 7000)
+    }, 8000)
 })()
