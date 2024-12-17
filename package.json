@@ -1,26 +1,36 @@
 {
-  "name": "bdsd-vietqr-speech",
-  "version": "1.0.0",
-  "main": "index.js",
-  "type": "commonjs",
-  "scripts": {
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js",
-    "dev-pm2": "pm2 start src/index.js --watch --name bdsd",
-    "start-pm2": "pm2 start src/index.js --name bdsd",
-    "stop-pm2": "pm2 stop bdsd",
-    "restart-pm2": "pm2 restart bdsd",
-    "delete-pm2": "pm2 delete bdsd",
-    "logs-pm2": "pm2 logs bdsd"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "axios": "^1.7.9",
-    "dotenv": "^16.4.7",
-    "mongoose": "^8.9.0",
-    "play-sound": "^1.1.6"
-  }
+    "name": "bdsd-vietqr-speech-v2",
+    "version": "1.0.0",
+    "main": "index.js",
+    "keywords": [],
+    "author": "huy thai",
+    "license": "MIT",
+    "description": "bdsd v2 app",
+    "type": "commonjs",
+    "scripts": {
+        "dev-local": "node --watch ./src/server.js",
+        "start-local": "node ./src/server.js",
+        "start": "pm2 start src/server.js --name bdsd-v2",
+        "restart": "pm2 restart bdsd-v2",
+        "stop": "pm2 stop bdsd-v2",
+        "delete": "pm2 delete bdsd-v2",
+        "logs": "pm2 logs bdsd-v2"
+    },
+    "_moduleAliases": {
+        "@src": "./src"
+    },
+    "dependencies": {
+        "axios": "^1.7.9",
+        "dotenv": "^16.4.7",
+        "module-alias": "^2.2.3",
+        "play-sound": "^1.1.6",
+        "sequelize": "^6.37.5",
+        "sqlite3": "^5.1.7"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.17.0",
+        "eslint": "^9.17.0",
+        "globals": "^15.13.0",
+        "sequelize-cli": "^6.6.2"
+    }
 }

@@ -1,5 +1,9 @@
 {
-  "compilerOptions": {
-    "baseUrl": "."
-  }
+    "compilerOptions": {
+        "module": "CommonJS",
+        "baseUrl": "./",
+        "paths": {
+            "@src/*": ["src/*"]
+        }
+    }
 }

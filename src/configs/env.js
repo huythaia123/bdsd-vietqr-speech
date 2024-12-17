@@ -1,8 +1,13 @@
+require("dotenv").config()
+
 const env = {
-  TRANSACTION_URL: process.env.TRANSACTION_URL,
-  MONGO_URI: process.env.MONGO_URI,
-  MONGO_DB_NAME: process.env.MONGO_DB_NAME,
-  VOICE_API_KEY: process.env.VOICE_API_KEY,
-  VOICE_API_URL: process.env.VOICE_API_URL,
-};
-module.exports = env;
+    TRANSACTION_URL: process.env.TRANSACTION_URL,
+    SQLITE_DB_NAME: process.env.SQLITE_DB_NAME,
+    TTS_API_KEY: process.env.TTS_API_KEY,
+    TTS_API_URL: process.env.TTS_API_URL,
+    AUDIO_FILE_PATH: (filename) => {
+        return process.cwd() + `/src/static/voice/${filename}`
+    },
+}
+
+module.exports = env
