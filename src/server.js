@@ -9,6 +9,7 @@ const {
 const { playAudio, getLinkSpeech, downloadAudio } = require("./controllers/tts.controller")
 const { checkConnectDB, sequelize } = require("./configs/db")
 const env = require("./configs/env")
+const { AxiosError } = require("axios")
 
 /* check os  */
 check_os()
@@ -33,7 +34,7 @@ checkConnectDB(sequelize)
                 // lưu giao dịch mới vào db
                 if (newSheetTrans.newTrans) {
                     const newTrans = await saveTrans(newSheetTrans.data)
-                    // console.log(`[+] New trans -- ${newTrans.MaGiaoDich} -- ${newTrans.SoTien} VND`)
+                    console.log(`[+] New trans -- ${newTrans.MaGiaoDich} -- ${newTrans.SoTien} VND`)
 
                     const filename = newTrans.SoTien.toString() + ".mp3"
                     const AUDIO_FILE_PATH = env.AUDIO_FILE_PATH(filename)
@@ -62,7 +63,11 @@ checkConnectDB(sequelize)
                     // console.log("[INFO] newSheetTrans.message :", newSheetTrans.message)
                 }
             } catch (error) {
-                console.error("[ERROR] :", error.message)
+                if (error instanceof AxiosError) {
+                    console.error(`${error.name} :`, error.message);
+                } else {
+                    console.error(`[ERROR] ${Object.keys[error]} :`, error)
+                }
             }
         }, 8000)
     })()

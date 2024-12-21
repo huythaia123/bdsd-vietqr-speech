@@ -8,10 +8,8 @@ const playerLib = require("play-sound")
 let player
 if (os.arch().includes("arm") && os.platform().includes("linux")) {
     player = playerLib({ players: ["mplayer"] })
-    console.log("[INFO] Raspberry Pi")
 } else {
     player = playerLib()
-    console.log("[INFO] Non-Raspberry Pi")
 }
 
 /* playAudio */
