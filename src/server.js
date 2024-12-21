@@ -16,53 +16,53 @@ check_os()
 /* database */
 checkConnectDB(sequelize)
 
-/* main function */
-;(async function () {
-    setInterval(async () => {
-        try {
-            // lấy giao dịch cuối cùng trong db
-            const lastTrans = await getLastTrans()
-            console.log("[INFO] lastTrans :", JSON.stringify(lastTrans))
+    /* main function */
+    ; (async function () {
+        setInterval(async () => {
+            try {
+                // lấy giao dịch cuối cùng trong db
+                const lastTrans = await getLastTrans()
+                // console.log("[INFO] lastTrans :", JSON.stringify(lastTrans))
 
-            // lấy giao dịch mới
-            const newSheetTrans = await getNewSheetTrans({
-                MaGiaoDich: lastTrans ? lastTrans.MaGiaoDich : "",
-            })
-            console.log("[INFO] newSheetTrans", newSheetTrans)
+                // lấy giao dịch mới
+                const newSheetTrans = await getNewSheetTrans({
+                    MaGiaoDich: lastTrans ? lastTrans.MaGiaoDich : "",
+                })
+                // console.log("[INFO] newSheetTrans", newSheetTrans)
 
-            // lưu giao dịch mới vào db
-            if (newSheetTrans.newTrans) {
-                const newTrans = await saveTrans(newSheetTrans.data)
-                console.log(`[+] New trans -- ${newTrans.MaGiaoDich} -- ${newTrans.SoTien} VND`)
+                // lưu giao dịch mới vào db
+                if (newSheetTrans.newTrans) {
+                    const newTrans = await saveTrans(newSheetTrans.data)
+                    // console.log(`[+] New trans -- ${newTrans.MaGiaoDich} -- ${newTrans.SoTien} VND`)
 
-                const filename = newTrans.SoTien.toString() + ".mp3"
-                const AUDIO_FILE_PATH = env.AUDIO_FILE_PATH(filename)
-                const audioFilePathExists = fs.existsSync(AUDIO_FILE_PATH)
-                console.log("[INFO] AUDIO_FILE_PATH :", AUDIO_FILE_PATH)
-                console.log("[INFO] audioFilePathExists :", audioFilePathExists)
+                    const filename = newTrans.SoTien.toString() + ".mp3"
+                    const AUDIO_FILE_PATH = env.AUDIO_FILE_PATH(filename)
+                    const audioFilePathExists = fs.existsSync(AUDIO_FILE_PATH)
+                    // console.log("[INFO] AUDIO_FILE_PATH :", AUDIO_FILE_PATH)
+                    // console.log("[INFO] audioFilePathExists :", audioFilePathExists)
 
-                // nếu file mp3 đã có
-                if (audioFilePathExists) {
-                    playAudio(AUDIO_FILE_PATH)
+                    // nếu file mp3 đã có
+                    if (audioFilePathExists) {
+                        playAudio(AUDIO_FILE_PATH)
+                    } else {
+                        // chưa có file mp3
+                        // call api download mp3
+                        // play mp3
+                        const ttsContent = newTrans.SoTien.toString() + " đồng"
+                        const linkSpeech = await getLinkSpeech({ content: ttsContent })
+                        // console.log("[INFO] linkSpeech :", linkSpeech.async)
+                        const audioFilePathAsync = await downloadAudio({
+                            audioUrl: linkSpeech.async,
+                            filename,
+                        })
+                        playAudio(audioFilePathAsync)
+                    }
                 } else {
-                    // chưa có file mp3
-                    // call api download mp3
-                    // play mp3
-                    const ttsContent = newTrans.SoTien.toString() + " đồng"
-                    const linkSpeech = await getLinkSpeech({ content: ttsContent })
-                    console.log("[INFO] linkSpeech :", linkSpeech.async)
-                    const audioFilePathAsync = await downloadAudio({
-                        audioUrl: linkSpeech.async,
-                        filename,
-                    })
-                    playAudio(audioFilePathAsync)
+                    // không có giao dịch mới
+                    // console.log("[INFO] newSheetTrans.message :", newSheetTrans.message)
                 }
-            } else {
-                // không có giao dịch mới
-                console.log("[INFO] newSheetTrans.message :", newSheetTrans.message)
+            } catch (error) {
+                console.error("[ERROR] :", error.message)
             }
-        } catch (error) {
-            console.error("[ERROR] :", error.message)
-        }
-    }, 8000)
-})()
+        }, 8000)
+    })()
